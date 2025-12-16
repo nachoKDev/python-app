@@ -25,7 +25,10 @@ jobs:
       
       - name: Set image tag
         id: vars
-        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+        shell: bash
+        run: |
+          TAG="${GITHUB_SHA:0:7}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Build and push
         uses: docker/build-push-action@v6
@@ -33,9 +36,10 @@ jobs:
           push: true
           tags: |
             nachokork/python-app:latest
-            nachokork/python-app:${{ env.TAG }}
+            nachokork/python-app:${{ steps.vars.outputs.tag }}
+
     outputs:
-      commit_id: nachokork/python-app:${{ env.TAG }}  
+      commit_id: ${{ steps.vars.outputs.tag }}
   
   cd:
     needs: ci
@@ -55,6 +59,7 @@ jobs:
           TAG="${{ needs.ci.outputs.commit_id }}"
           echo "Setting image tag to $TAG"
           yq -i '.image.tag = strenv(TAG)' charts/python-app/values.yaml
+
             
       - name: Commit changes to repo
         uses: EndBug/add-and-commit@v9
