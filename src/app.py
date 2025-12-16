@@ -14,7 +14,7 @@ def details():
 @app.route('/api/v1/healthz', methods=['GET'])
 def health_check():
     health_status = {
-        "status": "Up and Running!",
+        "status": "Up and Running!!",
     }
     return jsonify(health_status), 200
 
