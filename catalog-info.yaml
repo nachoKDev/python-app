@@ -5,6 +5,7 @@ metadata:
   description: A sample Python API
   annotations:
     github.com/project-slug: nachoKDev/python-app
+    backstage.io/techdocs-ref: dir:.
 spec:
   type: service
   owner: development
